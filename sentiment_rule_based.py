@@ -11,7 +11,7 @@ def preprocess(text):
     text = text.lower()
     text = re.sub(r'[^a-z\s]', '', text)
     return text.split()
-import re
+
 def analyze_sentiment(text):
     words = preprocess(text)
     sentiment_score = 0
@@ -21,11 +21,17 @@ def analyze_sentiment(text):
         if word in negation_words:
             negation = True
         elif word in positive_words:
-            sentiment_score += -1 if negation else 1
-            negation = False
+            if negation:
+                sentiment_score += -1
+                negation = False
+            else:
+                sentiment_score += 1    
         elif word in negative_words:
-            sentiment_score += 1 if negation else -1
-            negation = False
+            if negation:
+                sentiment_score += 1
+                negation = False
+            else:
+                sentiment_score += -1
 
     if sentiment_score > 0:
         return "Positive"
@@ -33,3 +39,5 @@ def analyze_sentiment(text):
         return "Negative"
     else:
         return "Neutral"
+c = analyze_sentiment("I hate this men")
+print(c)
